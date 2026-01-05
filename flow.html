@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Deal Flow | Alley & Street</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .game-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff1493, #c71585);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff1493;
+            margin: 20px 0;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 20, 147, 0.1);
+            border: 1px solid rgba(255, 20, 147, 0.3);
+            border-radius: 10px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff1493;
+        }
+
+        .card-container {
+            position: relative;
+            height: 500px;
+            margin-bottom: 30px;
+        }
+
+        .deal-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 20, 147, 0.2), rgba(199, 21, 133, 0.2));
+            border: 2px solid rgba(255, 20, 147, 0.4);
+            border-radius: 20px;
+            padding: 30px;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 40px rgba(255, 20, 147, 0.3);
+        }
+
+        .deal-card.dragging {
+            cursor: grabbing;
+        }
+
+        .deal-card.swipe-left {
+            animation: swipeLeft 0.5s ease forwards;
+        }
+
+        .deal-card.swipe-right {
+            animation: swipeRight 0.5s ease forwards;
+        }
+
+        @keyframes swipeLeft {
+            to {
+                transform: translateX(-150%) rotate(-30deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes swipeRight {
+            to {
+                transform: translateX(150%) rotate(30deg);
+                opacity: 0;
+            }
+        }
+
+        .deal-header {
+            margin-bottom: 20px;
+        }
+
+        .deal-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ff1493;
+        }
+
+        .deal-niche {
+            color: #999;
+            font-size: 1rem;
+        }
+
+        .deal-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metric {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 20, 147, 0.2);
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff1493;
+        }
+
+        .deal-description {
+            color: #ccc;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+
+        .swipe-actions {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .swipe-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .swipe-btn.pass {
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid rgba(255, 0, 0, 0.5);
+            color: #ff0000;
+        }
+
+        .swipe-btn.pass:hover {
+            background: rgba(255, 0, 0, 0.3);
+            transform: scale(1.1);
+        }
+
+        .swipe-btn.acquire {
+            background: rgba(0, 255, 0, 0.2);
+            border: 2px solid rgba(0, 255, 0, 0.5);
+            color: #00ff00;
+        }
+
+        .swipe-btn.acquire:hover {
+            background: rgba(0, 255, 0, 0.3);
+            transform: scale(1.1);
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff1493, #c71585);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .results-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 15, 35, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .results-screen.active {
+            display: flex;
+        }
+
+        .results-content {
+            background: rgba(255, 20, 147, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 20, 147, 0.5);
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .results-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #ff1493;
+        }
+
+        .grade {
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 20px 0;
+            background: linear-gradient(135deg, #ff1493, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .portfolio-value {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            color: #00ff00;
+        }
+
+        .results-breakdown {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">The Deal Flow</h1>
+            <p style="color: #999;">Swipe to build your portfolio</p>
+            <div class="timer" id="timer">60</div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-label">Deals Seen</div>
+                <div class="stat-value" id="dealsSeen">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Acquired</div>
+                <div class="stat-value" id="acquired">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Portfolio Value</div>
+                <div class="stat-value" id="portfolioValue">$0</div>
+            </div>
+        </div>
+
+        <div class="card-container" id="cardContainer"></div>
+
+        <div class="swipe-actions">
+            <button class="swipe-btn pass" onclick="swipe('left')">✕</button>
+            <button class="swipe-btn acquire" onclick="swipe('right')">✓</button>
+        </div>
+
+        <div class="game-controls">
+            <button class="btn btn-primary" id="startBtn">Start Game</button>
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">Back to Site</button>
+        </div>
+    </div>
+
+    <div class="results-screen" id="resultsScreen">
+        <div class="results-content">
+            <h2 class="results-title">Time's Up!</h2>
+            <div class="grade" id="grade">A+</div>
+            <div class="portfolio-value" id="finalValue">Portfolio Value: $0</div>
+            <div class="results-breakdown">
+                <div class="breakdown-item">
+                    <span>Deals Reviewed:</span>
+                    <span id="finalDeals">0</span>
+                </div>
+                <div class="breakdown-item">
+                    <span>Acquisitions Made:</span>
+                    <span id="finalAcquired">0</span>
+                </div>
+                <div class="breakdown-item">
+                    <span>Success Rate:</span>
+                    <span id="successRate">0%</span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="location.reload()">Play Again</button>
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">Back to Site</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const deals = [
+            { name: 'TaskFlow Pro', niche: 'Productivity', mrr: 5000, growth: 15, churn: 3, value: 150000 },
+            { name: 'EmailSync', niche: 'Marketing', mrr: 8000, growth: 25, churn: 5, value: 240000 },
+            { name: 'DataViz Studio', niche: 'Analytics', mrr: 12000, growth: 30, churn: 2, value: 400000 },
+            { name: 'TeamChat Plus', niche: 'Communication', mrr: 6000, growth: 20, churn: 4, value: 180000 },
+            { name: 'InvoiceMaster', niche: 'Finance', mrr: 10000, growth: 18, churn: 3, value: 300000 },
+            { name: 'CodeReview AI', niche: 'Developer Tools', mrr: 15000, growth: 35, churn: 2, value: 500000 },
+            { name: 'CRM Lite', niche: 'Sales', mrr: 7000, growth: 22, churn: 6, value: 200000 },
+            { name: 'DocuSign Clone', niche: 'Legal Tech', mrr: 9000, growth: 28, churn: 3, value: 270000 },
+            { name: 'SchedulePro', niche: 'Productivity', mrr: 4000, growth: 12, churn: 7, value: 120000 },
+            { name: 'SocialBoost', niche: 'Marketing', mrr: 11000, growth: 32, churn: 4, value: 350000 }
+        ];
+
+        let currentDealIndex = 0;
+        let dealsSeen = 0;
+        let acquired = 0;
+        let portfolioValue = 0;
+        let timeLeft = 60;
+        let gameRunning = false;
+        let timerInterval;
+
+        function startGame() {
+            gameRunning = true;
+            document.getElementById('startBtn').style.display = 'none';
+            showNextDeal();
+            startTimer();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function showNextDeal() {
+            if (currentDealIndex >= deals.length) {
+                currentDealIndex = 0;
+            }
+
+            const deal = deals[currentDealIndex];
+            const card = document.createElement('div');
+            card.className = 'deal-card';
+            card.innerHTML = `
+                <div class="deal-header">
+                    <div class="deal-name">${deal.name}</div>
+                    <div class="deal-niche">${deal.niche}</div>
+                </div>
+                <div class="deal-metrics">
+                    <div class="metric">
+                        <div class="metric-label">MRR</div>
+                        <div class="metric-value">$${deal.mrr.toLocaleString()}</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Growth</div>
+                        <div class="metric-value">${deal.growth}%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Churn</div>
+                        <div class="metric-value">${deal.churn}%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Valuation</div>
+                        <div class="metric-value">$${(deal.value / 1000).toFixed(0)}K</div>
+                    </div>
+                </div>
+                <div class="deal-description">
+                    ${getDescription(deal)}
+                </div>
+            `;
+
+            document.getElementById('cardContainer').innerHTML = '';
+            document.getElementById('cardContainer').appendChild(card);
+        }
+
+        function getDescription(deal) {
+            const descriptions = [
+                `A ${deal.niche.toLowerCase()} solution with strong fundamentals and growing user base.`,
+                `Established ${deal.niche.toLowerCase()} platform with proven product-market fit.`,
+                `Innovative ${deal.niche.toLowerCase()} tool serving a niche but growing market.`,
+                `Well-positioned ${deal.niche.toLowerCase()} SaaS with solid retention metrics.`
+            ];
+            return descriptions[Math.floor(Math.random() * descriptions.length)];
+        }
+
+        function swipe(direction) {
+            if (!gameRunning) return;
+
+            const card = document.querySelector('.deal-card');
+            if (!card) return;
+
+            dealsSeen++;
+            const deal = deals[currentDealIndex];
+
+            if (direction === 'right') {
+                acquired++;
+                portfolioValue += deal.value;
+                card.classList.add('swipe-right');
+            } else {
+                card.classList.add('swipe-left');
+            }
+
+            updateStats();
+
+            setTimeout(() => {
+                currentDealIndex++;
+                if (gameRunning) {
+                    showNextDeal();
+                }
+            }, 500);
+        }
+
+        function updateStats() {
+            document.getElementById('dealsSeen').textContent = dealsSeen;
+            document.getElementById('acquired').textContent = acquired;
+            document.getElementById('portfolioValue').textContent = '$' + (portfolioValue / 1000).toFixed(0) + 'K';
+        }
+
+        function endGame() {
+            gameRunning = false;
+            clearInterval(timerInterval);
+
+            const successRate = dealsSeen > 0 ? ((acquired / dealsSeen) * 100).toFixed(0) : 0;
+            let grade = 'F';
+            if (portfolioValue >= 1000000) grade = 'A+';
+            else if (portfolioValue >= 750000) grade = 'A';
+            else if (portfolioValue >= 500000) grade = 'B+';
+            else if (portfolioValue >= 300000) grade = 'B';
+            else if (portfolioValue >= 150000) grade = 'C';
+
+            document.getElementById('grade').textContent = grade;
+            document.getElementById('finalValue').textContent = 'Portfolio Value: $' + (portfolioValue / 1000).toFixed(0) + 'K';
+            document.getElementById('finalDeals').textContent = dealsSeen;
+            document.getElementById('finalAcquired').textContent = acquired;
+            document.getElementById('successRate').textContent = successRate + '%';
+            document.getElementById('resultsScreen').classList.add('active');
+        }
+
+        document.getElementById('startBtn').addEventListener('click', startGame);
+    </script>
+</body>
+
+</html>
