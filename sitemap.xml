@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+    
+    <!-- 
+        ALLEY AND STREET - XML SITEMAP
+        Micro Private Equity | SaaS Acquisitions
+        
+        IMPORTANT: Replace "https://alleyandstreet.com" with your actual domain before deploying.
+    -->
+    
+    <!-- Homepage - Highest Priority -->
+    <url>
+        <loc>https://alleyandstreet.com/</loc>
+        <lastmod>2026-01-06</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        <!-- Logo and branding images -->
+        <image:image>
+            <image:loc>https://alleyandstreet.com/assets/logo-icon.jpg</image:loc>
+            <image:title>Alley and Street Logo - Micro Private Equity Fund</image:title>
+            <image:caption>Alley and Street official logo - Specializing in SaaS acquisitions and micro private equity investments</image:caption>
+        </image:image>
+        <!-- Team member images for local SEO and trust -->
+        <image:image>
+            <image:loc>https://alleyandstreet.com/assets/founder-nakshatra.jpg</image:loc>
+            <image:title>Nakshatra Nigam - Co-Founder and Managing Partner</image:title>
+            <image:caption>Nakshatra Nigam, Co-Founder of Alley and Street, technology and automation specialist</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://alleyandstreet.com/assets/founder-kabeer.jpg</image:loc>
+            <image:title>Kabeer Jain - Co-Founder and Managing Partner</image:title>
+            <image:caption>Kabeer Jain, Co-Founder of Alley and Street, strategic investor specializing in SaaS businesses</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- Acquisition Hunt Game - Interactive Content -->
+    <url>
+        <loc>https://alleyandstreet.com/hunt.html</loc>
+        <lastmod>2026-01-06</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Portfolio Merge Game - Interactive Content -->
+    <url>
+        <loc>https://alleyandstreet.com/merge.html</loc>
+        <lastmod>2026-01-06</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- The Deal Flow Game - Interactive Content -->
+    <url>
+        <loc>https://alleyandstreet.com/flow.html</loc>
+        <lastmod>2026-01-06</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+</urlset>
