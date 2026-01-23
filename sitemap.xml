@@ -12,7 +12,7 @@
     <!-- Homepage - Highest Priority -->
     <url>
         <loc>https://alleyandstreet.com/</loc>
-        <lastmod>2026-01-06</lastmod>
+        <lastmod>2026-01-23</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <!-- Logo and branding images -->
@@ -37,7 +37,7 @@
     <!-- Acquisition Hunt Game - Interactive Content -->
     <url>
         <loc>https://alleyandstreet.com/hunt.html</loc>
-        <lastmod>2026-01-06</lastmod>
+        <lastmod>2026-01-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
@@ -45,7 +45,7 @@
     <!-- Portfolio Merge Game - Interactive Content -->
     <url>
         <loc>https://alleyandstreet.com/merge.html</loc>
-        <lastmod>2026-01-06</lastmod>
+        <lastmod>2026-01-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
@@ -53,7 +53,7 @@
     <!-- The Deal Flow Game - Interactive Content -->
     <url>
         <loc>https://alleyandstreet.com/flow.html</loc>
-        <lastmod>2026-01-06</lastmod>
+        <lastmod>2026-01-23</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
